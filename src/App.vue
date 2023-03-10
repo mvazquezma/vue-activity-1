@@ -2,52 +2,55 @@
 import {ref, computed} from "vue"
 import {productos} from "./datos.js"
 
-const contador = ref(0)
+const counter = ref(0)
 const total = productos.length;
 
 
-const siguiente = () => {
-  contador.value++;
+const next = () => {
+  counter.value++;
 
-  if(contador.value >= total) {
-    contador.value = 0
+  if(counter.value >= total) {
+    counter.value = 0
   }
 }
 
-const rey = computed(() => {
-  const elNombre = productos[contador.value].nombre.toLowerCase();
+const king = computed(() => {
+  const elNombre = productos[counter.value].nombre.toLowerCase();
   return elNombre.substring(0,1).toUpperCase() + elNombre.substring(1)
 })
 
 const imagen = computed(() => {
-  const nombreDelRey = productos[contador.value].nombre.toLowerCase()
-  return `https://www.html6.es/img/rey_${nombreDelRey}.png`
+  const kingName = productos[counter.value].nombre.toLowerCase()
+  return `https://www.html6.es/img/rey_${kingName}.png`
 })
 
-const nuevoPrecio = computed(() => {
-  const descuento = 10
-  return Number(productos[contador.value].precio - (productos[contador.value].precio * descuento)/100).toFixed(2)
+const newPrice = computed(() => {
+  const discount = 10
+  return Number(productos[counter.value].precio - (productos[counter.value].precio * discount)/100).toFixed(2)
 })
 </script>
 
 
 <template>
   <div class="card">
-    <h2>Cena {{ contador + 1 }} con el rey godo {{ rey }}</h2>
-    <h3 class="precio">Precio: {{ productos[contador].precio }}€</h3>
+    <h2>Cena {{ counter + 1 }} con el rey godo {{ king }}</h2>
+    <h3 class="precio">Precio: {{ productos[counter].precio }}€</h3>
     
-    <div class="weekend dias" v-if="productos[contador].finDeSemana">(Sólo fines de semana)</div>
-    <div v-else class="todos-los-dias dias">(De lunes a domingo)</div>
+    <div class="weekend days" v-if="productos[counter].finDeSemana">(Sólo fines de semana)</div>
+    <div v-else class="all-days days">(De lunes a domingo)</div>
 
-    <div v-if="productos[contador].precio < 100" class="oferta">
+    <div v-if="productos[counter].precio < 100" class="offer">
       <div>Ahora un 10% dto:
-        {{ nuevoPrecio }}€
-        <img src="oferta.jpg" alt="rey godo en descuento">
+        {{ newPrice }}€
+        <img src="oferta.jpg" alt="Rey godo en descuento">
       </div>
     </div>
 
-    <img :src="imagen" :alt="productos[contador].nombre.toLowerCase">
-    <button @:click="siguiente">Siguiente ({{ contador + 1 }} / {{ total }})</button>
+    <img 
+      :src="imagen" 
+      :alt="productos[counter].nombre.toLowerCase"
+    >
+    <button @:click="next">Siguiente ({{ counter + 1 }} / {{ total }})</button>
   </div>
 </template>
 
@@ -56,13 +59,13 @@ const nuevoPrecio = computed(() => {
   h2 {
     margin: 0;
   }
-  .todos-los-dias {
+  .all-days {
     background-color: green;
   }
   .weekend {
     background-color: red;
   }
-  .dias {
+  .days {
     padding: 4px 16px;
     font-size: 14px;
     width: fit-content;
@@ -71,14 +74,14 @@ const nuevoPrecio = computed(() => {
     margin: 5px 0 10px;
   }
 
-  .oferta {
+  .offer {
     margin-block-end: 32px;
   }
-  .oferta > div {
+  .offer > div {
     display: flex;
     align-items: center;
   }
-  .oferta img {
+  .offer img {
     width: 56px;
     margin-inline-start: 8px;
   }
